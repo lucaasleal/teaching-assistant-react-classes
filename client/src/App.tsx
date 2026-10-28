@@ -77,6 +77,11 @@ const App: React.FC = () => {
     setSelectedClass(null); // Clear selection if deleted class was selected
   };
 
+  const handleSheetSetChanged = () => {
+    loadStudents();
+    loadClasses();
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -120,6 +125,7 @@ const App: React.FC = () => {
               onStudentUpdated={handleStudentUpdated}
               onStudentDeleted={handleStudentSetChanged}
               onError={setError}
+              onSheetAdded={handleSheetSetChanged}
               loading={loading}
             />
           )}

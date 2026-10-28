@@ -4,6 +4,7 @@ import { Student } from '../types/Student';
 import ClassFilter from './ClassFilter';
 import StudentForm from './StudentForm';
 import StudentList from './StudentList';
+import StudentListImport from './StudentListImport'
 
 interface StudentsTabProps {
   students: Student[];                          // Every registered student
@@ -17,6 +18,7 @@ interface StudentsTabProps {
   onStudentUpdated: () => void;
   onStudentDeleted: () => void;
   onError: (errorMessage: string) => void;
+  onSheetAdded: () => void;
   loading: boolean;
 }
 
@@ -37,6 +39,7 @@ const StudentsTab: React.FC<StudentsTabProps> = ({
   onStudentUpdated,
   onStudentDeleted,
   onError,
+  onSheetAdded,
   loading
 }) => (
   <>
@@ -48,6 +51,13 @@ const StudentsTab: React.FC<StudentsTabProps> = ({
       onError={onError}
       onCancel={editingStudent ? onCancelEdit : undefined}
       editingStudent={editingStudent}
+      selectedClass={selectedClass}
+    />
+
+    <StudentListImport
+      onSheetAdded = {onSheetAdded}
+      onError={onError}
+      onCancel={undefined}
       selectedClass={selectedClass}
     />
 
