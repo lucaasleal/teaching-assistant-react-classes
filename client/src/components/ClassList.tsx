@@ -7,6 +7,7 @@ interface ClassListProps {
   onEditClass: (classObj: Class) => void;     // Callback when Edit is clicked
   onClassDeleted: () => void;                 // Callback when a class is successfully deleted
   onEnrollStudents: (classObj: Class) => void; // Callback when Enroll is clicked
+  onViewReport: (classObs: Class) => void; // Callback when Report is clicked
   onError: (errorMessage: string) => void;
 }
 
@@ -14,7 +15,7 @@ interface ClassListProps {
 const semesterLabel = (semester: number): string => (semester === 1 ? '1st Semester' : '2nd Semester');
 
 /** Table of the existing classes with their actions. */
-const ClassList: React.FC<ClassListProps> = ({ classes, onEditClass, onClassDeleted, onEnrollStudents, onError }) => {
+const ClassList: React.FC<ClassListProps> = ({ classes, onEditClass, onClassDeleted, onEnrollStudents, onViewReport, onError }) => {
   const handleDelete = async (classObj: Class) => {
     if (window.confirm(`Are you sure you want to delete the class "${classObj.topic} (${classObj.year}/${classObj.semester})"?`)) {
       try {
@@ -74,6 +75,13 @@ const ClassList: React.FC<ClassListProps> = ({ classes, onEditClass, onClassDele
                       title="Enroll students"
                     >
                       Enroll
+                    </button>
+                    <button
+                      className="report-btn"
+                      onClick={() => onViewReport(classObj)}
+                      title="View report"
+                    >
+                      Report
                     </button>
                   </td>
                 </tr>

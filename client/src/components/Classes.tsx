@@ -5,6 +5,7 @@ import { studentService } from '../services/StudentService';
 import ClassForm from './ClassForm';
 import ClassList from './ClassList';
 import EnrollmentModal from './EnrollmentModal';
+import ReportModal from './ReportModal';
 
 interface ClassesProps {
   classes: Class[];
@@ -25,6 +26,7 @@ const Classes: React.FC<ClassesProps> = ({
   const [editingClass, setEditingClass] = useState<Class | null>(null);
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [enrollmentModalClass, setEnrollmentModalClass] = useState<Class | null>(null);
+  const [reportModalClass, setReportModalClass] = useState<Class | null>(null);
 
   // Load all students for the enrollment modal
   const loadAllStudents = useCallback(async () => {
@@ -68,6 +70,7 @@ const Classes: React.FC<ClassesProps> = ({
         onEditClass={setEditingClass}
         onClassDeleted={onClassDeleted}
         onEnrollStudents={setEnrollmentModalClass}
+        onViewReport={setReportModalClass}
         onError={onError}
       />
 
@@ -77,6 +80,14 @@ const Classes: React.FC<ClassesProps> = ({
           allStudents={allStudents}
           onClose={() => setEnrollmentModalClass(null)}
           onStudentsEnrolled={handleStudentsEnrolled}
+          onError={onError}
+        />
+      )}
+
+      {reportModalClass && (
+        <ReportModal
+          classObj={reportModalClass}
+          onClose={() => setReportModalClass(null)}
           onError={onError}
         />
       )}

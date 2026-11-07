@@ -505,6 +505,10 @@ tbody tr:last-child td {
   color: #059669;
 }
 
+.classes-list table td:last-child {
+  white-space: nowrap;
+}
+
 /* Modern Enrollment Panel */
 .enrollment-overlay {
   position: fixed;
@@ -769,6 +773,25 @@ tbody tr:last-child td {
 
 .enroll-btn:hover {
   background-color: #2563eb;
+}
+
+/* Update report button in table */
+.report-btn {
+  background-color: #ed8936;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+  transition: background-color 0.2s;
+  min-width: auto;
+}
+
+.report-btn:hover {
+  background-color: #dd6b20;
 }
 
 /* Evaluations Table */
