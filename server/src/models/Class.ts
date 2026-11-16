@@ -8,12 +8,27 @@ import { DomainError } from './DomainError';
  * 'topic-year-semester', with the enrolled students and the specification
  * of how their averages are computed. A student is enrolled at most once.
  */
+
+export type ComparisonMetric =
+  | 'Média'
+  | 'Número de aprovados'
+  | 'Número de alunos aprovados'
+  | 'Número de alunos aprovados por nota'
+  | 'Número de alunos reprovados por nota'
+  | 'Número de alunos reprovados por falta';
+
 export class Class {
   private topic: string;
   private semester: number;
   private year: number;
   private readonly averageCalculationSpecification: AverageCalculationSpecification;
   private enrollments: Enrollment[];
+
+  public average: number = 0;
+  public aproved: number = 0;
+  public aproved_grade: number = 0;
+  public reproved_grade: number = 0;
+  public reproved_miss: number = 0;
 
   constructor(topic: string, semester: number, year: number, averageCalculationSpecification: AverageCalculationSpecification, enrollments: Enrollment[] = []) {
     this.topic = topic;
@@ -97,6 +112,41 @@ export class Class {
   // Get all enrolled students
   getEnrolledStudents(): Student[] {
     return this.enrollments.map(enrollment => enrollment.getStudent());
+  }
+
+  // Checks if any student has recorded grades
+  hasRecordedGrades(): boolean {
+    return this.enrollments.some((e) => e.getEvaluations().length > 0);
+  }
+
+  // Metrics calculations
+  calculateAverage(): number | 'N/A' {
+    if (!this.hasRecordedGrades()) return 'N/A';
+
+    const totalAverage = this.enrollments.reduce((sum, enrollment) => {
+      const avg = enrollment.calculateAverageAfterFinalExam();
+      return sum + (avg !== null ? avg : 0);
+    }, 0);
+    const count = this.enrollments.length;
+    this.average = count > 0 ? parseFloat((totalAverage / count).toFixed(2)) : 0;
+
+    return this.average;
+  }
+
+  // Space to calculate other metrics like number of approved/reproved students, etc.
+
+  generateComparisonChart(metric: string): number | 'N/A' {
+    const metricCalculators: Record<string, () => number | 'N/A'> = {
+      'Média': () => this.calculateAverage()
+      // Add other metrics calculations here as needed
+    };
+
+    const calculator = metricCalculators[metric];
+    if (!calculator) {
+      throw new DomainError('A métrica solicitada não é suportada pelo sistema');
+    }
+
+    return calculator();
   }
 
   // Convert to JSON for API responses
