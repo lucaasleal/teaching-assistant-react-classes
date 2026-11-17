@@ -43,11 +43,16 @@ export const filterStudents = (
     }
 };
 
-/** "Students" section of the report: filter bar + table with the class average in the footer. */
+/** "Students" section of the report: filter bar + table (the class average is its first row under "Below class average"). */
 const ReportStudentsTable: React.FC<ReportStudentsTableProps> = ({ students, studentsAverage }) => {
     const [filter, setFilter] = useState<ReportFilter>({ type: 'ALL' });
 
     const visibleStudents = filterStudents(students, filter, studentsAverage);
+
+    // The class average is only shown when it is the reference of the filter. It stays visible
+    // even if nobody is below it, since that is when knowing the average matters most.
+    const showAverage = filter.type === 'BELOW_AVERAGE';
+    const showTable = visibleStudents.length > 0 || showAverage;
 
     return (
         <div className="report-section">
@@ -93,7 +98,7 @@ const ReportStudentsTable: React.FC<ReportStudentsTableProps> = ({ students, stu
                         </span>
                     </div>
 
-                    {visibleStudents.length === 0 ? (
+                    {!showTable ? (
                         <p className="report-empty">No students match this filter</p>
                     ) : (
                         <div className="report-table-container">
@@ -106,6 +111,13 @@ const ReportStudentsTable: React.FC<ReportStudentsTableProps> = ({ students, stu
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {showAverage && (
+                                        <tr className="report-average-row">
+                                            <td>Class Average</td>
+                                            <td className="report-center">{studentsAverage.toFixed(1)}</td>
+                                            <td></td>
+                                        </tr>
+                                    )}
                                     {visibleStudents.map(student => (
                                         <tr key={student.studentId}>
                                             <td>{student.name}</td>
@@ -113,14 +125,14 @@ const ReportStudentsTable: React.FC<ReportStudentsTableProps> = ({ students, stu
                                             <td className="report-center">{STATUS_LABELS[student.status]}</td>
                                         </tr>
                                     ))}
+                                    {showAverage && visibleStudents.length === 0 && (
+                                        <tr>
+                                            <td colSpan={3} className="report-center">
+                                                No students below the class average
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
-                                <tfoot className="report-average-row">
-                                    <tr>
-                                        <td>Class Average</td>
-                                        <td className="report-center">{studentsAverage.toFixed(1)}</td>
-                                        <td></td>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     )}

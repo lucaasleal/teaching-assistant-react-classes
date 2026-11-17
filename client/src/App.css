@@ -900,11 +900,10 @@ tbody tr:last-child td {
   border-radius: 6px;
 }
 
-/* Class average: single row at the end of the students table */
+/* Class average: first row of the students table (only under "Below class average") */
 .report-average-row td {
   background-color: #f8fafc;
-  border-top: 2px solid #e2e8f0;
-  border-bottom: none;
+  border-bottom: 2px solid #e2e8f0;
   font-weight: 600;
   color: #374151;
 }
