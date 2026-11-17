@@ -880,6 +880,26 @@ tbody tr:last-child td {
   text-align: right;
 }
 
+/* Table with grouped header (Performance by Goal) */
+.report-group-header {
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.report-center {
+  text-align: center;
+}
+
+.report-empty {
+  color: #6b7280;
+  font-style: italic;
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  background-color: #f9fafb;
+  border-radius: 6px;
+}
+
 /* Update report button in table */
 .report-btn {
   background-color: #ed8936;

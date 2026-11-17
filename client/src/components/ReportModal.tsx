@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Class } from '../types/Class';
 import { ReportData } from '../types/Report';
 import { classService } from '../services/ClassService';
+import { GRADES } from '../types/Evaluation';
 
 interface ReportModalProps {
     classObj: Class;
@@ -91,6 +92,48 @@ const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) =
                                     </table>
                                 </div>
                             </div>
+
+                            <div className="report-section">
+                                <h4 className="report-section-title">Performance by Goal</h4>
+                                {report.evaluationPerformance.length === 0 ? (
+                                    <p className="report-empty">No evaluations recorded for this class</p>
+                                ) : (
+                                    <div className="report-table-container">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th rowSpan={2}>Goal</th>
+                                                    <th rowSpan={2} className="report-center">Average</th>
+                                                    <th colSpan={GRADES.length} className="report-group-header">
+                                                        Grade Distribution
+                                                    </th>
+                                                    <th rowSpan={2} className="report-center">Evaluated Students</th>
+                                                </tr>
+                                                <tr>
+                                                    {GRADES.map(grade => (
+                                                        <th key={grade} className="report-center">{grade}</th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {report.evaluationPerformance.map(performance => (
+                                                    <tr key={performance.goal}>
+                                                        <td>{performance.goal}</td>
+                                                        <td className="report-center">{performance.averageGrade.toFixed(1)}</td>
+                                                        {GRADES.map(grade => (
+                                                            <td key={grade} className="report-center">
+                                                                {performance.gradeDistribution[grade]}
+                                                            </td>
+                                                        ))}
+                                                        <td className="report-center">{performance.evaluatedStudents}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+
                         </>
                     )}
                 </div>
