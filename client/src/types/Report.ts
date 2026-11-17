@@ -38,3 +38,10 @@ export interface ReportData {
   students: StudentEntry[]; 
   generatedAt: Date;
 }
+
+export const STATUS_LABELS: Record<StudentStatus, string> = {
+  APPROVED: 'Approved',
+  IN_FINAL: 'In Final Exam',          // final grade not computed yet
+  APPROVED_FINAL: 'Approved at Final', // passed after the final exam
+  FAILED: 'Not Approved',
+};

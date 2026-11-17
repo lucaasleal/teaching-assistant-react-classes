@@ -13,7 +13,7 @@ export interface EvaluationPerformance {
   evaluatedStudents: number;
 }
 
-export type StudentStatus = 'APPROVED' | 'APPROVED_FINAL' | 'FAILED';
+export type StudentStatus = 'APPROVED' | 'IN_FINAL' | 'APPROVED_FINAL' | 'FAILED';
 
 export interface StudentEntry {
   studentId: string;
@@ -72,7 +72,7 @@ export class Report implements IReportGenerator {
       approvedFinalCount: 0,
       notApprovedCount: 0,
       evaluationPerformance: this.calculateEvaluationPerformance(),
-      students: [],
+      students: this.getStudentReports(),
       generatedAt: new Date()
     };
   }
@@ -99,7 +99,7 @@ export class Report implements IReportGenerator {
   }
 
   private calculateEvaluationPerformance(): EvaluationPerformance[] {
-  // Not implemented yet: one entry per goal, with every statistic zeroed.
+    // Not implemented yet: one entry per goal, with every statistic zeroed.
     return EVALUATION_GOALS.map(goal => ({
       goal,
       averageGrade: 0,
@@ -109,8 +109,13 @@ export class Report implements IReportGenerator {
   }
 
   private getStudentReports(): StudentEntry[] {
-    // Not implemented yet.
-    return [];
+    // Not implemented yet: lists the enrolled students with placeholder grade and status.
+    return this.classObj.getEnrollments().map((enrollment): StudentEntry => ({
+      studentId: enrollment.getStudent().getCPF(),
+      name: enrollment.getStudent().getName(),
+      finalGrade: 0,
+      status: 'FAILED'
+    }));
   }
 
   public toJSON(): ReportData {

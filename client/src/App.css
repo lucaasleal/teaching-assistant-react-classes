@@ -900,6 +900,63 @@ tbody tr:last-child td {
   border-radius: 6px;
 }
 
+/* Class average: single row at the end of the students table */
+.report-average-row td {
+  background-color: #f8fafc;
+  border-top: 2px solid #e2e8f0;
+  border-bottom: none;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Filter bar of the students table */
+.report-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.report-filter label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.report-filter-select,
+.report-filter-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+}
+
+.report-filter-select {
+  cursor: pointer;
+}
+
+.report-filter-input {
+  width: 6rem;
+}
+
+.report-filter-select:focus,
+.report-filter-input:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-color: #667eea;
+}
+
+.report-filter-count {
+  margin-left: auto;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+ 
 /* Update report button in table */
 .report-btn {
   background-color: #ed8936;

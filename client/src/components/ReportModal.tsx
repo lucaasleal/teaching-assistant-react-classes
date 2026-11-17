@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Class } from '../types/Class';
-import { ReportData } from '../types/Report';
+import { ReportData, STATUS_LABELS } from '../types/Report';
 import { classService } from '../services/ClassService';
 import { GRADES } from '../types/Evaluation';
+import ReportStudentsTable from './ReportStudentsTable';
 
 interface ReportModalProps {
     classObj: Class;
@@ -14,10 +15,10 @@ const percentage = (count: number, total: number): string =>
   total === 0 ? '0%' : `${Math.round((count / total) * 100)}%`;
 
 const buildStatusRows = (report: ReportData) => [
-  { label: 'Approved', count: report.approvedCount },
-  { label: 'In Final Exam', count: report.inFinalCount },
-  { label: 'Approved at Final', count: report.approvedFinalCount },
-  { label: 'Not Approved', count: report.notApprovedCount },
+  { label: STATUS_LABELS.APPROVED, count: report.approvedCount },
+  { label: STATUS_LABELS.IN_FINAL, count: report.inFinalCount },
+  { label: STATUS_LABELS.APPROVED_FINAL, count: report.approvedFinalCount },
+  { label: STATUS_LABELS.FAILED, count: report.notApprovedCount },
 ];
 
 const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) => {
@@ -134,6 +135,10 @@ const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) =
                                 )}
                             </div>
 
+                            <ReportStudentsTable
+                                students={report.students}
+                                studentsAverage={report.studentsAverage}
+                            />
                         </>
                     )}
                 </div>
