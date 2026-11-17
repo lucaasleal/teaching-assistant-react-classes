@@ -3,16 +3,6 @@ import { Student } from './Student';
 import { DomainError } from './DomainError';
 
 /** The registered classes, with at most one class per id (topic, year, semester). */
-
-export interface ComparisonChartResult {
-  metrics: {
-    [metricName: string]: {
-      [classId: string]: number | 'N/A';
-    };
-  };
-  warnings: string[];
-}
-
 export class Classes {
   private classes: Class[] = [];
 
@@ -153,45 +143,5 @@ export class Classes {
     });
 
     return students;
-  }
-
-  // Generate comparison chart for a given metric across all classes
-  generateChart(classIds: string[], metrics: string[]): ComparisonChartResult {
-    
-    // Find the classes by their IDs
-    const selectedClasses = classIds.map((id) => {
-      const cls = this.findClassById(id);
-      if (!cls) throw new DomainError(`Turma ${id} não encontrada`);
-      return cls;
-    });
-
-    // Check if all selected classes have the same topic
-    const distinctTopics = new Set(selectedClasses.map((c) => c.getTopic()));
-    if (distinctTopics.size > 1) {
-      throw new DomainError('Só é permitida a comparação entre turmas de uma única disciplina');
-    }
-
-    // Prepare the result structure
-    const result: ComparisonChartResult = { metrics: {}, warnings: [] };
-
-    for (const metric of metrics) {
-      result.metrics[metric] = {};
-      for (const cls of selectedClasses) {
-        try {
-          const value = cls.generateComparisonChart(metric);
-          result.metrics[metric][cls.getClassId()] = value;
-
-          if (value === 'N/A' && !result.warnings.includes(cls.getClassId())) {
-            result.warnings.push(`A turma "${cls.getClassId()}" não possui dados cadastradas`);
-          }
-        } catch (err) {
-          // If an error occurs while calculating the metric for a class, we log the error and set the value to 'N/A'
-          selectedClasses.forEach((c) => (result.metrics[metric][c.getClassId()] = 'N/A'));
-          throw err;
-        }
-      }
-    }
-
-    return result;
   }
 }
