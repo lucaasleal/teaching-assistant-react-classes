@@ -16,7 +16,14 @@
     "test:cucumber": "npm run test:cucumber --prefix client"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "cucumber-html-reporter": "^7.2.0",
+    "cucumber-pretty": "^6.0.1",
+    "cypress": "^16.3.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "cypress-xpath": "^2.0.1",
+    "install": "^0.13.0",
+    "npm": "^12.2.2"
   },
   "keywords": [
     "react",
