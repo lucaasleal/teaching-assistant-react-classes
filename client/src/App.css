@@ -847,7 +847,15 @@ tbody tr:last-child td {
 .report-summary {
   margin: 0;
   color: #374151;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.report-section-title {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .report-table-container {
@@ -862,6 +870,14 @@ tbody tr:last-child td {
   text-align: center;
   background-color: #f9fafb;
   border-radius: 6px;
+}
+
+.report-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-align: right;
 }
 
 /* Update report button in table */

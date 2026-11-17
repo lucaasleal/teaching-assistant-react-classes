@@ -30,6 +30,7 @@ export interface ReportData {
   totalEnrolled: number;
   studentsAverage: number;
   approvedCount: number;
+  inFinalCount: number;
   approvedFinalCount: number;
   notApprovedCount: number;
   evaluationPerformance: EvaluationPerformance[];
@@ -67,6 +68,7 @@ export class Report implements IReportGenerator {
       totalEnrolled: 0, 
       studentsAverage: 0,
       approvedCount: 0,
+      inFinalCount: 0,
       approvedFinalCount: 0,
       notApprovedCount: 0,
       evaluationPerformance: [],
@@ -91,9 +93,9 @@ export class Report implements IReportGenerator {
     return false;
   }
 
-  private calculateApprovalStats(): { approved: number; approvedFinal: number; notApproved: number } {
+  private calculateApprovalStats(): { approved: number; inFinalCount: number; approvedFinal: number; notApproved: number } {
     // Not implemented yet.
-    return { approved: 0, approvedFinal: 0, notApproved: 0 };
+    return { approved: 0, inFinalCount: 0, approvedFinal: 0, notApproved: 0 };
   }
 
   private calculateEvaluationPerformance(): EvaluationPerformance[] {
