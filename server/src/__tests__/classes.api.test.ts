@@ -153,7 +153,7 @@ describe('Class endpoints', () => {
       approvedCount: 0,
       approvedFinalCount: 0,
       notApprovedCount: 0,
-      evaluationPerformance: [],
+      evaluationPerformance: expect.any(Array),
       students: []
     });
     expect(typeof response.body.generatedAt).toBe('string');

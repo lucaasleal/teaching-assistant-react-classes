@@ -323,7 +323,10 @@ describe('Report', () => {
     expect(report).toMatchObject({
       classId: 'Software Engineering-2025-1', topic: 'Software Engineering', semester: 1, year: 2025,
       totalEnrolled: 0, studentsAverage: 0, approvedCount: 0, approvedFinalCount: 0, notApprovedCount: 0,
-      evaluationPerformance: [], students: []
+      evaluationPerformance: EVALUATION_GOALS.map(goal => ({
+        goal, averageGrade: 0, gradeDistribution: { MANA: 0, MPA: 0, MA: 0 }, evaluatedStudents: 0
+      })),
+      students: []
     });
     expect(report.generatedAt).toBeInstanceOf(Date);
     expect(new Report(newClass()).toJSON()).toMatchObject({ classId: 'Software Engineering-2025-1' });

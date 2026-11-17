@@ -1,6 +1,6 @@
 import { Class } from './Class';
 import { Enrollment } from './Enrollment';
-import { Grade } from './Evaluation';
+import { EVALUATION_GOALS, Grade } from './Evaluation';
 
 export interface EvaluationPerformance {
   goal: string;
@@ -71,7 +71,7 @@ export class Report implements IReportGenerator {
       inFinalCount: 0,
       approvedFinalCount: 0,
       notApprovedCount: 0,
-      evaluationPerformance: [],
+      evaluationPerformance: this.calculateEvaluationPerformance(),
       students: [],
       generatedAt: new Date()
     };
@@ -99,8 +99,13 @@ export class Report implements IReportGenerator {
   }
 
   private calculateEvaluationPerformance(): EvaluationPerformance[] {
-    // Not implemented yet.
-    return [];
+  // Not implemented yet: one entry per goal, with every statistic zeroed.
+    return EVALUATION_GOALS.map(goal => ({
+      goal,
+      averageGrade: 0,
+      gradeDistribution: { MANA: 0, MPA: 0, MA: 0 },
+      evaluatedStudents: 0
+    }));
   }
 
   private getStudentReports(): StudentEntry[] {
