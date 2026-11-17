@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Class } from '../types/Class';
-import { ReportData, STATUS_LABELS } from '../types/Report';
+import { ReportData } from '../types/Report';
 import { classService } from '../services/ClassService';
 import { GRADES } from '../types/Evaluation';
+import ReportStatusSection from './ReportStatusSection';
 import ReportStudentsTable from './ReportStudentsTable';
 
 interface ReportModalProps {
@@ -10,16 +11,6 @@ interface ReportModalProps {
     onClose: () => void;
     onError: (errorMessage: string) => void;
 }
-
-const percentage = (count: number, total: number): string =>
-  total === 0 ? '0%' : `${Math.round((count / total) * 100)}%`;
-
-const buildStatusRows = (report: ReportData) => [
-  { label: STATUS_LABELS.APPROVED, count: report.approvedCount },
-  { label: STATUS_LABELS.IN_FINAL, count: report.inFinalCount },
-  { label: STATUS_LABELS.APPROVED_FINAL, count: report.approvedFinalCount },
-  { label: STATUS_LABELS.FAILED, count: report.notApprovedCount },
-];
 
 const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) => {
     const [report, setReport] = useState<ReportData | null>(null);
@@ -70,29 +61,9 @@ const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) =
                                 Enrolled Students: {report.totalEnrolled}
                             </p>
 
-                            <div className="report-section">
-                                <h4 className="report-section-title">Students by Status</h4>
-                                <div className="report-table-container">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Metric</th>
-                                                <th>Students</th>
-                                                <th>Percentage</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {buildStatusRows(report).map(row => (
-                                                <tr key={row.label}>
-                                                    <td>{row.label}</td>
-                                                    <td>{row.count}</td>
-                                                    <td>{percentage(row.count, report.totalEnrolled)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <ReportStatusSection
+                                report={report}
+                            />
 
                             <div className="report-section">
                                 <h4 className="report-section-title">Performance by Goal</h4>
