@@ -90,6 +90,28 @@ const buildReport = (className: string, students: StudentEntry[]): ReportData =>
   };
 };
 
+/** "bar chart" -> "bar": the view whose toggle button the interface shows. */
+type ReportView = 'table' | 'bar' | 'pie';
+const viewOfLabel = (label: string): ReportView => {
+  const view = label.toLowerCase().replace(' chart', '');
+  if (view !== 'table' && view !== 'bar' && view !== 'pie') {
+    throw new Error(`Unknown view "${label}"; use "table", "bar chart" or "pie chart"`);
+  }
+  return view;
+};
+
+/** Clicks the Report button of the class, without waiting for the report. */
+const clickReportButton = async (className: string) => {
+  const { id } = parseClassName(className);
+  const reportButton = `[data-testid="report-class-${id}"]`;
+  await page.waitForSelector(reportButton);
+  await page.click(reportButton);
+};
+
+/** Waits until the report shows the given view. */
+const waitForView = (view: ReportView) =>
+  page.waitForSelector(view === 'table' ? '[data-testid="status-row-APPROVED"]' : `[data-testid="status-chart-${view}"]`);
+
 /* ------------------------------- hooks -------------------------------- */
 
 Before({ tags: '@report-gui' }, async function () {
@@ -173,13 +195,22 @@ Given('I am at the {string} page', async function (pageName: string) {
   await page.waitForSelector('.classes-container');
 });
 
+Given('I am viewing the performance report for class {string} as a {string}', async function (className: string, viewLabel: string) {
+  await clickReportButton(className);
+  await page.waitForSelector('.report-summary'); // the modal first shows "Loading report..."
+  const view = viewOfLabel(viewLabel);
+  await page.click(`[data-testid="report-view-${view}"]`);
+  await waitForView(view);
+});
+
 /* --------------------------------- When --------------------------------- */
 
 When('I view the performance report for class {string}', async function (className: string) {
-  const { id } = parseClassName(className);
-  const reportButton = `[data-testid="report-class-${id}"]`;
-  await page.waitForSelector(reportButton);
-  await page.click(reportButton);
+  await clickReportButton(className);
+});
+
+When('I request to view the performance report as a {string}', async function (viewLabel: string) {
+  await page.click(`[data-testid="report-view-${viewOfLabel(viewLabel)}"]`);
 });
 
 /* --------------------------------- Then --------------------------------- */
@@ -223,4 +254,57 @@ Then('I do not see the performance report for class {string}', async function (c
   await page.waitForSelector('[data-testid="report-modal"]', { hidden: true });
   const text = await page.$eval('body', el => el.textContent ?? '');
   expect(text).not.toContain(`Report of ${topic} (${year}.${semester})`);
+});
+
+Then('I should see the performance report displayed as a {string}', async function (viewLabel: string) {
+  const view = viewOfLabel(viewLabel);
+  await waitForView(view);
+  const pressed = await page.$eval(`[data-testid="report-view-${view}"]`, el => el.getAttribute('aria-pressed'));
+  expect(pressed).toBe('true');
+  // and no other chart is shown at the same time
+  for (const other of ['bar', 'pie'].filter(chart => chart !== view)) {
+    expect(await page.$(`[data-testid="status-chart-${other}"]`)).toBeNull();
+  }
+});
+
+Then('the chart should represent the students by status as:', async function (table: DataTable) {
+  const rows = table.hashes();
+  const total = rows.reduce((sum, row) => sum + Number(row.students), 0);
+  const segments = await page.$$eval('[data-testid^="chart-segment-"]', els =>
+    els.map(el => ({
+      testId: el.getAttribute('data-testid') ?? '',
+      tag: el.tagName.toLowerCase(),
+      path: el.getAttribute('d'),
+      count: el.getAttribute('data-count'),
+      percentage: el.getAttribute('data-percentage')
+    }))
+  );
+
+  for (const row of rows) {
+    const segment = segments.find(s => s.testId === `chart-segment-${statusOfLabel(row.status)}`);
+    expect(segment).toBeDefined();
+    expect(segment!.count).toBe(row.students);
+    expect(segment!.percentage).toBe(row.percentage);
+
+    // A pie slice must also be drawn with the right size: compare its angle with the expected share
+    const expectedShare = Number(row.students) / total;
+    if (segment!.tag === 'circle') {
+      expect(expectedShare).toBe(1); // a single status holds everyone
+    } else if (segment!.tag === 'path') {
+      const n = '([-+\\d.eE]+)';
+      const match = new RegExp(`^M ${n} ${n} L ${n} ${n} A ${n} ${n} 0 [01] 1 ${n} ${n} Z$`).exec(segment!.path ?? '');
+      expect(match).not.toBeNull();
+      const [cx, cy, sx, sy, , , ex, ey] = match!.slice(1).map(Number);
+      const sweep = (Math.atan2(ey - cy, ex - cx) - Math.atan2(sy - cy, sx - cx) + 2 * Math.PI) % (2 * Math.PI);
+      expect(Math.abs(sweep / (2 * Math.PI) - expectedShare)).toBeLessThan(0.01);
+    }
+  }
+
+  // The pie chart also has a legend that the professor reads
+  const legend = await page.$$eval('.report-chart-legend li', items => items.map(item => (item.textContent ?? '').trim()));
+  if (legend.length > 0) {
+    for (const row of rows) {
+      expect(legend).toContain(`${row.status}: ${row.students} (${row.percentage})`);
+    }
+  }
 });

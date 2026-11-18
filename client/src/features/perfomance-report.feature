@@ -34,8 +34,18 @@ Scenario: Attempt to view report for a class with no graded students
     And I do not see the performance report for class "ESS 2026.1"
 
 Scenario: Change the visualization chart format for the class performance report
-    Given the class "ESS 2025.2" has performance records in the system
-    And I am viewing the performance report for class "ESS 2025.2" as a "bar chart"
+    Given the class "ESS 2026.2" has the following students and academic statuses:
+        | student     | final grade | status        |
+        | Ana Souza   | 3.0         | Not Approved  |
+        | João Silva  | 8.5         | Approved      |
+        | Maria Costa | 7.0         | Approved      |
+        | Pedro Alves | 5.0         | In Final Exam |
+    And I am at the "Classes" page
+    And I am viewing the performance report for class "ESS 2026.2" as a "bar chart"
     When I request to view the performance report as a "pie chart"
     Then I should see the performance report displayed as a "pie chart"
-    And the chart should accurately represent the proportions of performance statuses for class "ESS 2025.2"
+    And the chart should represent the students by status as:
+        | status        | students | percentage |
+        | Approved      | 2        | 50%        |
+        | In Final Exam | 1        | 25%        |
+        | Not Approved  | 1        | 25%        |
