@@ -119,7 +119,7 @@ const ReportStudentsTable: React.FC<ReportStudentsTableProps> = ({ students, stu
                                         </tr>
                                     )}
                                     {visibleStudents.map(student => (
-                                        <tr key={student.studentId}>
+                                        <tr key={student.studentId} data-testid="report-student-row">
                                             <td>{student.name}</td>
                                             <td className="report-center">{student.finalGrade.toFixed(1)}</td>
                                             <td className="report-center">{STATUS_LABELS[student.status]}</td>

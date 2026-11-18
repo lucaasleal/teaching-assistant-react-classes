@@ -67,7 +67,7 @@ const ReportStatusSection: React.FC<{ report: ReportData }> = ({ report }) => {
                         </thead>
                         <tbody>
                             {rows.map(row => (
-                                <tr key={row.status}>
+                                <tr key={row.status} data-testid={`status-row-${row.status}`}>
                                     <td>{row.label}</td>
                                     <td>{row.count}</td>
                                     <td>{row.percentage}</td>

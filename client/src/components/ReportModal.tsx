@@ -40,7 +40,7 @@ const ReportModal: React.FC<ReportModalProps> = ({classObj, onClose, onError}) =
 
     return (
         <div className="report-overlay">
-            <div className="report-modal">
+            <div className="report-modal" data-testid="report-modal">
                 <div className="report-modal-header">
                     <h3>Report of {classObj.topic} ({classObj.year}.{classObj.semester})</h3>
                     <button

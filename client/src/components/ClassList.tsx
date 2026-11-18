@@ -80,6 +80,7 @@ const ClassList: React.FC<ClassListProps> = ({ classes, onEditClass, onClassDele
                       className="report-btn"
                       onClick={() => onViewReport(classObj)}
                       title="View report"
+                      data-testid={`report-class-${classObj.id}`}
                     >
                       Report
                     </button>
