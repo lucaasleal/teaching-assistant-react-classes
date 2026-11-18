@@ -17,7 +17,7 @@ Scenario Outline: Sucesso na geração do gráfico de desempenho em cada métric
     And o eixo X do gráfico possui as turmas "<turma1>" e "<turma2>"
     And o eixo Y do gráfico possui o valor "<valor1>" determinando a altura da coluna da turma "<turma1>"
     And o eixo Y do gráfico possui o valor "<valor2>" determinando a altura da coluna da turma "<turma2>"
-  Exemples:
+  Examples:
   | métrica                               | disciplina                                 | turma1  | turma2  | valor1 | valor2 |
   | Média                                 | Engenharia de Software e Sistemas          | T0-24.1 | T0-24.2 | 8.4    | 7.8    |
   | Número de alunos aprovados            | Sinais e Sistemas para Computação          | T1-26.1 | T2-26.1 | 42     | 37     |
