@@ -14,12 +14,21 @@ let page: Page;
 // What the scenario created on the server, so that the After hook can remove it
 let createdClassIds: string[] = [];
 
-// STUB: reports the browser receives instead of asking the server, by class id.
-// The final grade and the status of each student are computed by another team's
-// code, which is not available yet, so the "server side" of the report is faked
-// at the HTTP boundary. These tests check how the GUI PRESENTS a report; the
-// expected values come from the scenarios, never from the stub.
-let reportStubs: Map<string, ReportData>;
+// STUB: responses the browser receives instead of asking the server, by class id.
+// The final grade and the status of each student, and the rule that refuses a
+// report for a class without grades, belong to code that is not available yet,
+// so the "server side" of the report is faked at the HTTP boundary. These tests
+// check how the GUI PRESENTS what the server says; the expected values come from
+// the scenarios, never from the stub.
+interface ReportStub {
+  status: number;
+  body: unknown;
+}
+let reportStubs: Map<string, ReportStub>;
+
+// Same convention as the server's error handler: { "error": "<message>" }
+// ATTENTION: the real server must use exactly this text when it implements the rule
+const NO_GRADES_MESSAGE = 'Relatório de desempenho indisponível para turmas sem notas registradas';
 
 /* ------------------------------ helpers ------------------------------ */
 
@@ -87,9 +96,10 @@ Before({ tags: '@report-gui' }, async function () {
   createdClassIds = [];
   reportStubs = new Map();
   browser = await launch({
-    headless: false,
+    headless: false, // true for CI
     slowMo: 50,
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe'
+    // Chrome of this machine; set CHROME_PATH to use another one
+    executablePath: process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe'
   });
   page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 720 });
@@ -101,10 +111,10 @@ Before({ tags: '@report-gui' }, async function () {
     const stub = match && reportStubs.get(decodeURIComponent(match[1]));
     if (stub) {
       request.respond({
-        status: 200,
+        status: stub.status,
         contentType: 'application/json',
         headers: { 'Access-Control-Allow-Origin': '*' }, // client (3004) and server (3005) differ in origin
-        body: JSON.stringify(stub)
+        body: JSON.stringify(stub.body)
       });
     } else {
       request.continue();
@@ -139,7 +149,19 @@ Given('the class {string} has the following students and academic statuses:', as
     finalGrade: Number(row['final grade']),
     status: statusOfLabel(row.status)
   }));
-  reportStubs.set(id, buildReport(className, students));
+  reportStubs.set(id, { status: 200, body: buildReport(className, students) });
+});
+
+Given('the class {string} has no student grades recorded in the system', async function (className: string) {
+  const { topic, year, semester, id } = parseClassName(className);
+
+  // The class really exists (with no students, hence no grades)
+  await deleteClassIfExists(id);
+  await api('POST', '/api/classes', { topic, year, semester });
+  createdClassIds.push(id);
+
+  // The server refuses to generate its report
+  reportStubs.set(id, { status: 400, body: { error: NO_GRADES_MESSAGE } });
 });
 
 // Opened after the setup, so the page loads the class the setup created
@@ -187,4 +209,18 @@ Then('the report should list the students with their final grades and statuses:'
   const expected = table.hashes().map(row => [row.student, row['final grade'], row.status]);
   // the order of the rows is not part of the requirement
   expect([...shown].sort()).toEqual([...expected].sort());
+});
+
+Then('I should see the error message {string}', async function (message: string) {
+  await page.waitForSelector('[data-testid="error-message"]');
+  const shown = await page.$eval('[data-testid="error-message"]', el => el.textContent);
+  expect(shown).toContain(message);
+});
+
+Then('I do not see the performance report for class {string}', async function (className: string) {
+  const { topic, year, semester } = parseClassName(className);
+  // the modal opens showing "Loading report..." and closes when the error arrives
+  await page.waitForSelector('[data-testid="report-modal"]', { hidden: true });
+  const text = await page.$eval('body', el => el.textContent ?? '');
+  expect(text).not.toContain(`Report of ${topic} (${year}.${semester})`);
 });

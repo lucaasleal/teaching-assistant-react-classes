@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
       <main className="App-main">
         {error && (
-          <div className="error-message">
+          <div className="error-message" data-testid="error-message">
             <strong>Error:</strong> {error}
           </div>
         )}
