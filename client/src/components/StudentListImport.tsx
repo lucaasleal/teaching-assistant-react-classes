@@ -1,74 +1,75 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Student } from '../types/Student';
-import { formatCPF } from '../types/CPF';
+import React, { useState, useRef } from 'react';
 import { Class } from '../types/Class';
 import { studentService } from '../services/StudentService';
-import { enrollmentService } from '../services/EnrollmentService';
 
 interface StudentListImportProps {
-  onSheetAdded: () => void;      // Callback when student is successfully added
+  onSheetAdded: () => void;
   onCancel?: () => void;
-  onError: (error: string) => void; // Callback for error handling
-  selectedClass?: Class | null;     // Currently selected class for auto-enrollment
+  onError: (error: string) => void;
+  selectedClass?: Class | null;
 }
 
-const StudentListImport: React.FC<StudentListImportProps> = ({ 
-  onSheetAdded, 
-  onCancel, 
+const StudentListImport: React.FC<StudentListImportProps> = ({
+  onSheetAdded,
+  onCancel,
   onError,
   selectedClass
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
-  const fileInputRef = useRef<HTMLInputElement>(null);  
+  const [feedback, setFeedback] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
-    if(fileInputRef.current){
-        fileInputRef.current.click();
-    }
-  }
+    fileInputRef.current?.click();
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      console.log("Arquivo selecionado:", file.name);
+    const file = event.target.files?.[0];
+    // Cancelling the native picker leaves the previous selection unchanged.
+    if (!file) return;
+    setFeedback('');
+    if (!/\.(csv|xlsx)$/i.test(file.name)) {
+      setSelectedFile(null);
+      event.target.value = '';
+      onError('Formato esperado: CSV ou XLSX');
+      return;
     }
-  }
+    setSelectedFile(file);
+    onError('');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!selectedFile) {
-      onError("Por favor, selecione um arquivo antes de salvar.");
+      onError('Selecione uma planilha antes de importar');
       return;
     }
-
     setIsSubmitting(true);
-
-        
-    // Auto-enroll in selected class if one is selected
-    /*if (selectedClass) {
-        try {
-        await enrollmentService.enrollStudent(selectedClass.id, newStudent.cpf);
-        console.log(`Student ${newStudent.name} enrolled in ${selectedClass.topic}`);
-        } catch (enrollmentError) {
-        // Student was created but enrollment failed - show warning
-        onError(`Student created successfully, but enrollment failed: ${(enrollmentError as Error).message}`);
-        setFormData({ name: '', cpf: '', email: '' }); // Clear form anyway
-        return; // Exit early to avoid showing success message
-        }
+    setFeedback('');
+    onError('');
+    try {
+      const result = await studentService.importStudents(selectedFile, selectedClass?.id);
+      setFeedback(result.message === 'ALUNO_JA_CADASTRADO'
+        ? 'ALUNO_JA_CADASTRADO'
+        : result.duplicated > 0
+          ? `Planilha de alunas importada corretamente (${result.duplicated} aluno(s) já cadastrado(s))`
+          : 'Planilha de alunas importada corretamente');
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      // Refresh the original StudentsTab and class enrollment list; no GUI redesign.
+      onSheetAdded();
+    } catch (error) {
+      onError(error instanceof Error ? error.message : 'Falha ao importar planilha');
+    } finally {
+      setIsSubmitting(false);
     }
-        */
-    
   };
-
 
   return (
     <form onSubmit={handleSubmit} className="student-form" data-testid="student-form">
       <h2>Sheet Import</h2>
-      
+
       {/* Class enrollment indicator */}
       {selectedClass && (
         <div className="auto-enrollment-notice">
@@ -78,7 +79,7 @@ const StudentListImport: React.FC<StudentListImportProps> = ({
           </span>
         </div>
       )}
-      
+
       {/* SEÇÃO DO ARQUIVO: Input oculto e o botão estilizado */}
       <div className="file-upload-container" style={{ margin: '20px 0' }}>
         <input
@@ -86,14 +87,13 @@ const StudentListImport: React.FC<StudentListImportProps> = ({
           ref={fileInputRef}
           onChange={handleFileChange}
           style={{ display: 'none' }}
-          accept=".csv, .xlsx, .xls" // Opcional: restringe para arquivos de planilha
+          accept=".csv, .xlsx"
         />
-        
+
         {/* Usamos type="button" para garantir que ele NÃO envie o formulário ao ser clicado */}
         <button type="button" onClick={handleButtonClick} className="select-file-btn">
           📁 {selectedFile ? 'Alterar Arquivo' : 'Selecionar Planilha'}
         </button>
-
         {/* Mostra o nome do arquivo selecionado para o usuário ver que funcionou */}
         {selectedFile && (
           <p style={{ marginTop: '8px', fontSize: '14px', color: '#555' }}>
@@ -101,11 +101,11 @@ const StudentListImport: React.FC<StudentListImportProps> = ({
           </p>
         )}
       </div>
-    
+
       <div className="form-buttons">
         {/* Este botão sim faz o submit final do formulário */}
-        <button type="submit" disabled={isSubmitting || !selectedFile} data-testid="submit-student-button">
-          {isSubmitting ? 'Saving...' : 'Add Student'}
+        <button type="submit" disabled={isSubmitting} data-testid="submit-student-button">
+          {isSubmitting ? 'Saving...' : 'Add Batch of Students'}
         </button>
         {onCancel && (
           <button type="button" onClick={onCancel}>
@@ -113,7 +113,9 @@ const StudentListImport: React.FC<StudentListImportProps> = ({
           </button>
         )}
       </div>
+      {feedback && <p role="status" aria-live="polite">{feedback}</p>}
     </form>
   );
 };
+
 export default StudentListImport;
