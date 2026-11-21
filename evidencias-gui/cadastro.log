@@ -1,0 +1,9 @@
+
+> student-manager-client@0.1.0 test:cucumber
+> npx cucumber-js --config cucumber.js --tags @gui --format summary --format html:../evidencias-gui/cadastro.html --format json:../evidencias-gui/cadastro.json
+
+GUI cleanup: Confirming deletion dialog: Are you sure you want to delete Test Student?
+GUI cleanup: Removed student with CPF: 123.456.789-01
+1 scenario (1 passed)
+9 steps (9 passed)
+0m24.175s (executing steps: 0m24.157s)

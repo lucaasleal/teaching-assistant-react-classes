@@ -15,6 +15,7 @@ const CorrelationSection: React.FC<CorrelationSectionProps> = ({ classes, onErro
   const [results, setResults] = useState<CorrelationResult[]>([]);
   const [hasViewed, setHasViewed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const hasEnoughClasses = selectedIds.length >= 2;
 
   const toggleClass = (classId: string) => {
     setSelectedIds(current => current.includes(classId)
@@ -98,18 +99,18 @@ const CorrelationSection: React.FC<CorrelationSectionProps> = ({ classes, onErro
         className="correlation-action"
         type="button"
         onClick={viewCorrelations}
-        disabled={selectedIds.length === 0 || firstVariable === secondVariable || loading}
+        disabled={!hasEnoughClasses || firstVariable === secondVariable || loading}
       >
         {loading ? 'Analisando dados...' : 'Ver dados de correlação'}
       </button>
 
-      {hasViewed && !loading && results.length === 0 && (
+      {hasEnoughClasses && hasViewed && !loading && results.length === 0 && (
         <div className="correlation-empty" role="status">
           Não há dados suficientes para construir correlações com as seleções atuais.
         </div>
       )}
 
-      {results.length > 0 && (
+      {hasEnoughClasses && results.length > 0 && (
         <div className="correlation-results" aria-live="polite">
           <h4>Resultados encontrados</h4>
           {results.map(result => (
