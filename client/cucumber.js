@@ -21,5 +21,11 @@ module.exports = {
   correlacao: {
     ...shared,
     paths: ['src/features/correlation-gui.feature']
+  },
+  'correlation-api': {
+    ...shared,
+    paths: ['../features/correlationsAPI.feature'],
+    require: ['src/step-definitions/correlation-api-steps.ts'],
+    format: ['summary']
   }
 };

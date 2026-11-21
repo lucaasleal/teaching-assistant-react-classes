@@ -13,7 +13,8 @@
     "test": "npm run test:server && npm run test:client",
     "test:server": "npm test --prefix server",
     "test:client": "CI=true npm test --prefix client",
-    "test:cucumber": "npm run test:cucumber --prefix client"
+    "test:cucumber": "npm run test:cucumber --prefix client",
+    "test:correlation-api": "npm run test:cucumber --prefix client -- --profile correlation-api"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
