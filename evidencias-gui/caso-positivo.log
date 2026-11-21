@@ -1,7 +1,0 @@
-
-> student-manager-client@0.1.0 test:cucumber
-> npx cucumber-js --config cucumber.js --profile correlacao src/features/correlation-gui.feature:5 --format summary --format html:../evidencias-gui/caso-positivo.html --format json:../evidencias-gui/caso-positivo.json
-
-1 scenario (1 passed)
-6 steps (6 passed)
-0m01.899s (executing steps: 0m01.883s)
