@@ -55,15 +55,15 @@ Scenario: Sucesso na geração do gráfico de desempenho ao selecionar múltipla
     And eu seleciono a turma "T1-25.1"
     And eu seleciono a turma "T2-25.2"
     And eu seleciono a métrica "Média"
-    And eu seleciono a métrica "Número de aprovados"
+    And eu seleciono a métrica "Número de alunos aprovados"
     And eu solicito a geração do gráfico de desempenho
   Then eu consigo ver um gráfico de colunas com o título "Média" abaixo das seleções
-    And eu consigo ver um gráfico de colunas com o título "Número de aprovados" abaixo do primeiro gráfico
+    And eu consigo ver um gráfico de colunas com o título "Número de alunos aprovados" abaixo do primeiro gráfico
     And o eixo X de ambos os gráficos possui as turmas "T1-25.1" e "T2-25.2"
     And o eixo Y do gráfico "Média" possui o valor "8.1" determinando a altura da coluna da turma "T1-25.1"
     And o eixo Y do gráfico "Média" possui o valor "9.0" determinando a altura da coluna da turma "T2-25.2"
-    And o eixo Y do gráfico "Número de aprovados" possui o valor "58" determinando a altura da coluna da turma "T1-25.1"
-    And o eixo Y do gráfico "Número de aprovados" possui o valor "47" determinando a altura da coluna da turma "T2-25.2"
+    And o eixo Y do gráfico "Número de alunos aprovados" possui o valor "58" determinando a altura da coluna da turma "T1-25.1"
+    And o eixo Y do gráfico "Número de alunos aprovados" possui o valor "47" determinando a altura da coluna da turma "T2-25.2"
 
 Scenario: Sucesso na geração do gráfico de desempenho mesmo selecionando turma sem dados cadastrados
   Given eu estou na página "Comparação de Desempenho"
