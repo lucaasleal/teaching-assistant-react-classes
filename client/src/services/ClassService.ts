@@ -1,5 +1,6 @@
 import { Class, CreateClassRequest } from '../types/Class';
 import { ReportData } from '../types/Report';
+import { CorrelationResult } from '../types/Correlation';
 import { get, remove, sendJson } from './apiClient';
 
 const CLASSES = '/api/classes';
@@ -42,4 +43,7 @@ export const classService = {
 
   compareClasses: (payload: ComparisonRequestPayload): Promise<ComparisonApiResponse> =>
     sendJson('POST', `${CLASSES}/comparison`, payload, 'Failed to compare classes')
+
+  buildCorrelation: (classIds: string[], variables: [string, string]): Promise<CorrelationResult[]> =>
+    sendJson('POST', `${CLASSES}/correlation`, { classIds, variables }, 'Failed to build correlation')
 };

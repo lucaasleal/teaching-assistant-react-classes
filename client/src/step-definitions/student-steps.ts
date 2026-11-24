@@ -67,7 +67,8 @@ const requireTestStudentRow = async (): Promise<ElementHandle<Element>> => {
 
 Before({ tags: '@gui' }, async function () {
   browser = await launch({ 
-    headless: false, // Set to true for CI/CD
+    headless: process.env.GUI_HEADLESS === '1',
+    args: process.env.GUI_CHROME_NO_SANDBOX === '1' ? ['--no-sandbox'] : [],
     slowMo: 50 // Slow down actions for visibility
   });
   page = await browser.newPage();
@@ -177,4 +178,5 @@ Then('the student should have CPF {string}', async function (expectedCPF: string
 Then('the student should have email {string}', async function (expectedEmail: string) {
   const row = await requireTestStudentRow();
   expect(await cellText(row, 'student-email')).toBe(expectedEmail);
+  await this.attach(await page.screenshot({ encoding: 'base64' }), 'base64:image/png');
 });
