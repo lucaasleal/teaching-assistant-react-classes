@@ -37,5 +37,8 @@
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
 }

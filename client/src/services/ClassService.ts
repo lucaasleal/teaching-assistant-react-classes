@@ -42,7 +42,7 @@ export const classService = {
     get(`${classPath(classId)}/report`, 'Failed to fetch class report'),
 
   compareClasses: (payload: ComparisonRequestPayload): Promise<ComparisonApiResponse> =>
-    sendJson('POST', `${CLASSES}/comparison`, payload, 'Failed to compare classes')
+    sendJson('POST', `${CLASSES}/comparison`, payload, 'Failed to compare classes'),
 
   buildCorrelation: (classIds: string[], variables: [string, string]): Promise<CorrelationResult[]> =>
     sendJson('POST', `${CLASSES}/correlation`, { classIds, variables }, 'Failed to build correlation')
