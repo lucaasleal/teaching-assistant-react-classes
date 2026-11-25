@@ -13,8 +13,6 @@ export interface CorrelationResult {
 }
 
 export const CORRELATION_VARIABLES = [
-  { value: 'attendanceRate', label: 'Attendance rate' },
-  { value: 'overallAverage', label: 'Overall average' },
   { value: 'Requirements', label: 'Requirements' },
   { value: 'Configuration Management', label: 'Configuration Management' },
   { value: 'Project Management', label: 'Project Management' },
@@ -30,12 +28,9 @@ const gradeValue: Record<string, number> = { MANA: 1, MPA: 2, MA: 3 };
 const enrollmentResult = (classObj: Class, enrollmentIndex: number, variable: CorrelationVariable): number | undefined => {
   const enrollment = classObj.getEnrollments()[enrollmentIndex];
   if (!enrollment) return undefined;
-  if (variable === 'attendanceRate') {
-    return enrollment.getFailedByAbsence() ? 0 : 1;
-  }
   const evaluations = enrollment.getEvaluations();
   const grades = evaluations
-    .filter(evaluation => variable === 'overallAverage' || evaluation.getGoal() === variable)
+    .filter(evaluation => evaluation.getGoal() === variable)
     .map(evaluation => gradeValue[evaluation.getGrade()])
     .filter((grade): grade is number => grade !== undefined);
   return grades.length ? grades.reduce((sum, grade) => sum + grade, 0) / grades.length : undefined;

@@ -9,8 +9,6 @@ export interface CorrelationResult {
 }
 
 export const CORRELATION_VARIABLES = [
-  { value: 'attendanceRate', label: 'Attendance rate' },
-  { value: 'overallAverage', label: 'Overall average' },
   { value: 'Requirements', label: 'Requirements' },
   { value: 'Configuration Management', label: 'Configuration Management' },
   { value: 'Project Management', label: 'Project Management' },

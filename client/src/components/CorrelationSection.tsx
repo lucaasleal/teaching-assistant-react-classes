@@ -11,7 +11,7 @@ interface CorrelationSectionProps {
 const CorrelationSection: React.FC<CorrelationSectionProps> = ({ classes, onError }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [firstVariable, setFirstVariable] = useState('Requirements');
-  const [secondVariable, setSecondVariable] = useState('overallAverage');
+  const [secondVariable, setSecondVariable] = useState('Design');
   const [results, setResults] = useState<CorrelationResult[]>([]);
   const [hasViewed, setHasViewed] = useState(false);
   const [loading, setLoading] = useState(false);
