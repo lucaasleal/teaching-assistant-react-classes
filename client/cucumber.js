@@ -17,7 +17,7 @@ module.exports = {
     ...shared,
     paths: ['src/features/*student-management.feature']
   },
-  // These scenarios start and stop their own API on port 3005.
+  // These scenarios send HTTP requests to the running API (default port 3005).
   correlacao: {
     ...shared,
     paths: ['src/features/correlation-gui.feature']
