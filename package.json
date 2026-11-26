@@ -13,14 +13,21 @@
     "test": "npm run test:server && npm run test:client",
     "test:server": "npm test --prefix server",
     "test:client": "CI=true npm test --prefix client",
-    "test:cucumber": "npm run test:cucumber --prefix client"
+    "test:cucumber": "npm run test:cucumber --prefix client",
+    "test:correlation-api": "npm run test:cucumber --prefix client -- --profile correlation-api"
   },
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^28.0.1",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
     "concurrently": "^8.2.2",
     "typescript": "^7.0.2",
-    "webpack": "^5.112.2"
+    "webpack": "^5.112.2",
+    "concurrently": "^8.2.2",
+    "cucumber-html-reporter": "^7.2.0",
+    "cucumber-pretty": "^6.0.1",
+    "cypress": "^16.3.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "cypress-xpath": "^2.0.1"
   },
   "keywords": [
     "react",
@@ -35,5 +42,8 @@
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
 }

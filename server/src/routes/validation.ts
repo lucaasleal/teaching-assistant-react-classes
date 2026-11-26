@@ -9,3 +9,6 @@ export const isNonEmptyString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
 
 export const isInteger = (value: unknown): value is number => Number.isInteger(value);
+
+export const isNonEmptyStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.length > 0 && value.every(isNonEmptyString);

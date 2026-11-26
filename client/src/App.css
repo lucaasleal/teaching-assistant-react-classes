@@ -380,6 +380,197 @@ tbody tr:last-child td {
   max-width: 1000px;
 }
 
+.correlation-section {
+  margin-top: 2rem;
+  padding: 1.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.correlation-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-eyebrow {
+  color: #667eea;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.correlation-section h3 {
+  color: #2d3748;
+  font-size: 1.5rem;
+  margin: 0.2rem 0 0.25rem;
+}
+
+.correlation-section p {
+  color: #4a5568;
+}
+
+.correlation-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.correlation-controls fieldset {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.correlation-controls legend {
+  padding: 0 0.35rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.correlation-help {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.correlation-options {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.correlation-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #2d3748;
+  text-align: left;
+  font: inherit;
+}
+
+.correlation-option:hover {
+  background: #f7fafc;
+}
+
+.correlation-option.selected {
+  border-color: #c3dafe;
+  background: #ebf4ff;
+}
+
+.variable-selectors {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.variable-selectors label {
+  display: grid;
+  gap: 0.35rem;
+  color: #4a5568;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.variable-selectors select {
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background: #fff;
+  color: #2d3748;
+  font: inherit;
+}
+
+.correlation-versus {
+  padding-bottom: 0.6rem;
+  color: #667eea;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.correlation-option span {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.correlation-option small,
+.correlation-results small {
+  color: #718096;
+}
+
+.correlation-action {
+  margin-top: 1.25rem;
+}
+
+.correlation-empty {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px dashed #cbd5e0;
+  border-radius: 8px;
+  color: #4a5568;
+  background: #f8fafc;
+}
+
+.correlation-results {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.correlation-results h4 {
+  color: #2d3748;
+}
+
+.correlation-results article {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.correlation-results article > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.correlation-results article p {
+  max-width: 55%;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .correlation-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .variable-selectors {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-versus {
+    display: none;
+  }
+
+  .correlation-results article {
+    display: grid;
+  }
+
+  .correlation-results article p {
+    max-width: none;
+    text-align: left;
+  }
+}
+
 .class-form-container {
   margin-bottom: 2rem;
   padding: 1.5rem;
@@ -1228,4 +1419,86 @@ tbody tr:last-child td {
 .evaluation-loading {
   padding: 20px;
   text-align: center;
+}
+
+/* Class Performance Comparison */
+.comparison-section {
+  margin-top: 2rem;
+}
+
+.comparison-warning {
+  padding: 0.875rem 1rem;
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.comparison-charts-container {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.comparison-chart-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comparison-chart-card h4 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.chart-bars-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  height: 200px;
+  padding: 1rem 0.75rem 0;
+  border-bottom: 2px solid #4a5568;
+}
+
+.chart-bar-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chart-bar-value {
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.chart-bar-fill {
+  width: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.chart-x-axis {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem 0.75rem 0;
+}
+
+.chart-x-label {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #4a5568;
 }

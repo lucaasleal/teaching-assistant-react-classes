@@ -1,9 +1,28 @@
 import { Class, CreateClassRequest } from '../types/Class';
 import { ReportData } from '../types/Report';
+import { CorrelationResult } from '../types/Correlation';
 import { get, remove, sendJson } from './apiClient';
 
 const CLASSES = '/api/classes';
 export const classPath = (classId: string) => `${CLASSES}/${classId}`;
+
+export type ComparisonMetricValue = number | 'N/A';
+
+export interface ComparisonRequestPayload {
+  topic: string;
+  classIds: string[];
+  metrics: string[];
+}
+
+export interface ComparisonApiResponse {
+  topic: string;
+  metrics: {
+    [metricName: string]: {
+      [classId: string]: ComparisonMetricValue;
+    };
+  };
+  warnings: string[];
+}
 
 /** Access to the classes kept by the server. */
 export const classService = {
@@ -20,5 +39,11 @@ export const classService = {
     remove(classPath(classId), 'Failed to delete class'),
 
   getClassReport: (classId: string): Promise<ReportData> =>
-    get(`${classPath(classId)}/report`, 'Failed to fetch class report')
+    get(`${classPath(classId)}/report`, 'Failed to fetch class report'),
+
+  compareClasses: (payload: ComparisonRequestPayload): Promise<ComparisonApiResponse> =>
+    sendJson('POST', `${CLASSES}/comparison`, payload, 'Failed to compare classes'),
+
+  buildCorrelation: (classIds: string[], variables: [string, string]): Promise<CorrelationResult[]> =>
+    sendJson('POST', `${CLASSES}/correlation`, { classIds, variables }, 'Failed to build correlation')
 };
