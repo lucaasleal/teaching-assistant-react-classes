@@ -19,6 +19,21 @@
       "name": "Joana Refatoração",
       "cpf": "55555555555",
       "email": "jr@gmail.com"
+    },
+    {
+      "name": "Mary Jane",
+      "cpf": "11122233344",
+      "email": "mj@cin.ufpe.br"
+    },
+    {
+      "name": "Harry Osborn",
+      "cpf": "22233344455",
+      "email": "ho@cin.ufpe.br"
+    },
+    {
+      "name": "Gwen Stacy",
+      "cpf": "11133322210",
+      "email": "gs@cin.ufpe.br"
     }
   ],
   "classes": [
@@ -69,7 +84,10 @@
               "goal": "Refactoring",
               "grade": "MA"
             }
-          ]
+          ],
+          "averageBeforeFinalExam": null,
+          "averageAfterFinalExam": null,
+          "failedByAbsence": false
         },
         {
           "studentCPF": "55555555555",
@@ -98,7 +116,10 @@
               "goal": "Tests",
               "grade": "MPA"
             }
-          ]
+          ],
+          "averageBeforeFinalExam": null,
+          "averageAfterFinalExam": null,
+          "failedByAbsence": false
         },
         {
           "studentCPF": "22222222222",
@@ -115,87 +136,10 @@
               "goal": "Project Management",
               "grade": "MPA"
             }
-          ]
-        }
-      ]
-    },
-    {
-      "topic": "Engenharia de Software e Sistemas",
-      "semester": 2,
-      "year": 2025,
-      "averageCalculationSpecification": {
-        "gradeWeights": {
-          "MA": 10,
-          "MPA": 7,
-          "MANA": 0
-        },
-        "goalWeights": {
-          "Requirements": 1,
-          "Configuration Management": 1,
-          "Project Management": 1,
-          "Design": 1,
-          "Tests": 1,
-          "Refactoring": 1
-        }
-      },
-      "enrollments": [
-        {
-          "studentCPF": "22222222222",
-          "evaluations": [
-            {
-              "goal": "Requirements",
-              "grade": "MPA"
-            },
-            {
-              "goal": "Configuration Management",
-              "grade": "MA"
-            },
-            {
-              "goal": "Project Management",
-              "grade": "MPA"
-            },
-            {
-              "goal": "Design",
-              "grade": "MA"
-            },
-            {
-              "goal": "Refactoring",
-              "grade": "MA"
-            },
-            {
-              "goal": "Tests",
-              "grade": "MA"
-            }
-          ]
-        },
-        {
-          "studentCPF": "33333333333",
-          "evaluations": [
-            {
-              "goal": "Requirements",
-              "grade": "MA"
-            },
-            {
-              "goal": "Configuration Management",
-              "grade": "MPA"
-            },
-            {
-              "goal": "Project Management",
-              "grade": "MANA"
-            },
-            {
-              "goal": "Design",
-              "grade": "MA"
-            },
-            {
-              "goal": "Tests",
-              "grade": "MANA"
-            },
-            {
-              "goal": "Refactoring",
-              "grade": "MA"
-            }
-          ]
+          ],
+          "averageBeforeFinalExam": null,
+          "averageAfterFinalExam": null,
+          "failedByAbsence": false
         }
       ]
     }
